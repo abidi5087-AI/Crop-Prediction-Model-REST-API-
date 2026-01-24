@@ -1,5 +1,3 @@
 flask
 gunicorn
-pandas
 scikit-learn==1.2.2
-numpy
