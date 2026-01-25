@@ -1,5 +1,5 @@
 body {
-        background-image: url("/static/images/app.jpeg");
+        background-image: url('app.jpeg');
         background-position: center;
         margin-top: 100px;
         margin-bottom: 2000px;
