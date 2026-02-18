@@ -1,16 +1,21 @@
-import numpy as np
+
+   import numpy as np
 from flask import Flask, request, render_template
 import pickle
 import os
 
 app = Flask(__name__)
 
-# Model file ka path set karna (Vercel ke liye zaroori)
+# 1. Model variable ko pehle khali (None) declare karein
+model = None
+
+# 2. Model file ka path set karein
 model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
 
-# Model load karna - is line par dhyan dein
+# 3. Model load karne ki koshish karein
 try:
-    model = pickle.load(open(model_path, 'rb'))
+    with open(model_path, 'rb') as f:
+        model = pickle.load(f)
 except Exception as e:
     print(f"Model Load Error: {e}")
 
@@ -20,20 +25,15 @@ def Home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    # Check karein ki model load hua hai ya nahi
+    if model is None:
+        return render_template("index.html", prediction_text="Error: Model file not loaded. Check logs.")
+    
     try:
-        # Form se data lena
+        # Aapka purana prediction logic yahan rahega...
         float_features = [float(x) for x in request.form.values()]
         features = [np.array(float_features)]
-        
-        # Prediction karna
         prediction = model.predict(features)
-        
-        # Result dikhana
         return render_template("index.html", prediction_text="The Predicted Crop is {}".format(prediction[0]))
-    
     except Exception as e:
-        # Agar koi galti ho toh screen par error dikhega
         return render_template("index.html", prediction_text=f"Error: {str(e)}")
-
-if __name__ == "__main__":
-    app.run(debug=True)
