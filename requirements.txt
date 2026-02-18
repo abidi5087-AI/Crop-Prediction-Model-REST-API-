@@ -1,5 +1,5 @@
 flask
 gunicorn
-scikit-learn==0.24.2
+scikit-learn==1.0.2
 pandas
-numpy==1.21.6
+numpy==1.22.4
