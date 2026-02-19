@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 from flask import Flask, request, render_template
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder='../templates',static_folder='../static')
 current_dir=os.path.dirname(__file__)
 model_path=os.path.join(current_dir, "model.pkl")
 
