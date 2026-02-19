@@ -2,7 +2,7 @@ import numpy as np
 from flask import Flask, request, render_template
 import pickle
 import os
-
+base_dir = os.path.dirname(__file__)
 app = Flask(__name__)
 
 # Model file dhoondne ka rasta
