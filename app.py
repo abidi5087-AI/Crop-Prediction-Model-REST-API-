@@ -2,11 +2,9 @@ import numpy as np
 from flask import Flask, request, render_template
 import pickle
 import os
-base_dir = os.path.dirname(__file__)
 app = Flask(__name__)
-
 # Model file dhoondne ka rasta
-model_path =os.path.join(os.path.dirname(__file__), 'model.pkl'
+model_path = 'model.pkl'
 
 # Model load karna
 model = None
