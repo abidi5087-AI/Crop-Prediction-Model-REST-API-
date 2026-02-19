@@ -4,6 +4,8 @@ import numpy as np
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
+current_dir=os.path.dirname(__file__)
+model_path=os.path.join(current_dir, "model.pkl")
 
 # ===== Load Model Safely =====
 model = None
@@ -12,9 +14,9 @@ try:
     # Seedha file name use karo bina kisi BASE_DIR ke
     with open("model.pkl", "rb") as f:
         model = pickle.load(f)
-    print("✅ Model loaded successfully")
+    print("✅ Model loaded from api folder")
 except Exception as e:
-    print(f"❌ Model Load Error: {e}")
+    print(f"❌ Error: {e}")
     
 # ===== Home Route =====
 @app.route("/")
