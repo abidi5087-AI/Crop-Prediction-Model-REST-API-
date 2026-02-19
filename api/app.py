@@ -8,7 +8,7 @@ app = Flask(__name__, template_folder='../templates', static_folder='../static')
 
 # ===== Sahi rasta model load karne ke liye =====
 current_dir = os.path.dirname(__file__)
-model_path = os.path.join(current_dir, api_folder="model.pkl")
+model_path = os.path.join(current_dir,"model.pkl")
 
 model = None
 try:
