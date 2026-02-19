@@ -11,23 +11,26 @@ current_dir = os.path.dirname(__file__)
 model_path = os.path.join(current_dir,"model.pkl")
 
 model = None
+error_msg = "" # Error store karne ke liye
+
 try:
-    # Aapke purane code mein yahan 'model_path' ki jagah sirf naam tha, ab fix hai
-    with open(model_path, "rb") as f:
-        model = pickle.load(f)
-    print("✅ Model loaded successfully from api folder")
+    if os.path.exists(model_path):
+        with open(model_path, "rb") as f:
+            model = pickle.load(f)
+        print("✅ Model loaded successfully!")
+    else:
+        error_msg = f"File not found at: {model_path}"
+        print(f"❌ {error_msg}")
 except Exception as e:
-    print(f"❌ Error loading model: {e}")
-    model_error_msg= str(e)
+    error_msg = str(e)
+    print(f"❌ Pickle Load Error: {e}")
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# ... baaki code ...
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    if model is None:
-        return render_template('index.html', prediction_text=f"Server Error:{model_error_msg}")
+# Predict function mein ye line change karo:
+if model is None:
+    return render_template('index.html', prediction_text=f"Model Error: {error_msg}")
+    
 
     try:
         # Form se values lekar float mein badalna
