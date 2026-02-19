@@ -6,22 +6,16 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 
 # ===== Load Model Safely =====
-BASE_DIR = os.path.dirname(__file__)
-model_path = os.path.join(BASE_DIR, "model.pkl")
-
 model = None
 
 try:
-    if os.path.exists(model_path):
-        with open(model_path, "rb") as f:
-            model = pickle.load(f)
-        print("✅ Model loaded successfully")
-    else:
-        print("❌ Model file not found at:", model_path)
+    # Seedha file name use karo bina kisi BASE_DIR ke
+    with open("model.pkl", "rb") as f:
+        model = pickle.load(f)
+    print("✅ Model loaded successfully")
 except Exception as e:
-    print("❌ Model Load Error:", e)
-
-
+    print(f"❌ Model Load Error: {e}")
+    
 # ===== Home Route =====
 @app.route("/")
 def home():
