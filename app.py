@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Model file dhoondne ka rasta
-model_path = 'model.pkl'
+model_path =os.path.join(os.path.dirname(__file__), 'model.pkl'
 
 # Model load karna
 model = None
