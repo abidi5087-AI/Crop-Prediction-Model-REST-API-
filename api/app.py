@@ -18,6 +18,7 @@ try:
     print("✅ Model loaded successfully from api folder")
 except Exception as e:
     print(f"❌ Error loading model: {e}")
+    model_error_msg= str(e)
 
 @app.route('/')
 def home():
@@ -26,7 +27,7 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     if model is None:
-        return render_template('index.html', prediction_text="Model not loaded. Check server logs.")
+        return render_template('index.html', prediction_text=f"Server Error:{model_error_msg}")
 
     try:
         # Form se values lekar float mein badalna
