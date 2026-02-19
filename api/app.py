@@ -3,55 +3,46 @@ import pickle
 import numpy as np
 from flask import Flask, request, render_template
 
-app = Flask(__name__,template_folder='../templates',static_folder='../static')
-current_dir=os.path.dirname(__file__)
-model_path=os.path.join(current_dir, "model.pkl")
+# Flask initialization - Templates folder bahar hai isliye '../templates' use kiya hai
+app = Flask(__name__, template_folder='../templates')
 
 # ===== Load Model Safely =====
+current_dir = os.path.dirname(__file__)
+model_path = os.path.join(current_dir, "model.pkl")
+
 model = None
-
 try:
-    # Seedha file name use karo bina kisi BASE_DIR ke
-    with open("model.pkl", "rb") as f:
-        model = pickle.load(f)
-    print("✅ Model loaded from api folder")
+    if os.path.exists(model_path):
+        with open(model_path, "rb") as f:
+            model = pickle.load(f)
+        print("✅ Model loaded successfully from api folder")
+    else:
+        print(f"❌ Model file NOT found at: {model_path}")
 except Exception as e:
-    print(f"❌ Error: {e}")
-    
-# ===== Home Route =====
-@app.route("/")
+    print(f"❌ Error loading model: {e}")
+
+@app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template('index.html')
 
-
-# ===== Predict Route =====
-@app.route("/predict", methods=["POST"])
+@app.route('/predict', methods=['POST'])
 def predict():
+    if model is None:
+        return render_template('index.html', prediction_text="Error: Model not loaded on server.")
+
     try:
-        if model is None:
-            return render_template("index.html", prediction_text="❌ Model not loaded")
-
-        # Get form values
-        nitrogen = float(request.form["Nitrogen"])
-        phosphorus = float(request.form["phosphorus"])
-        potassium = float(request.form["potassium"])
-        temperature = float(request.form["Temperature"])
-        humidity = float(request.form["Humidity"])
-        ph = float(request.form["PH"])
-        rainfall = float(request.form["Rainfall"])
-
-        # Prepare input array
-        features = np.array([[nitrogen, phosphorus, potassium,
-                              temperature, humidity, ph, rainfall]])
-
-        # Prediction
+        # Form se values lena aur numeric mein convert karna
+        feature_list = [float(x) for x in request.form.values()]
+        features = np.array(feature_list).reshape(1, -1)
+        
+        # Prediction karna
         prediction = model.predict(features)
-        output = prediction[0]
-
-        return render_template("index.html", prediction_text=f"🌱 Recommended Crop: {output}")
-
+        result = prediction[0]
+        
+        return render_template('index.html', prediction_text=f"Recommended Crop: {result}")
     except Exception as e:
-        return render_template("index.html", prediction_text=f"❌ Error: {str(e)}")
+        return render_template('index.html', prediction_text=f"Error during prediction: {e}")
 
-
-# ===== Run
+# Vercel handles the app, but for local testing:
+if __name__ == "__main__":
+    app.run(debug=True)
