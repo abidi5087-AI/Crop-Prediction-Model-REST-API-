@@ -7,11 +7,18 @@ from flask import Flask, request, render_template
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 
 # ===== Sahi rasta model load karne ke liye =====
-current_dir = os.path.dirname(__file__)
-model_path = os.path.join(current_dir,"model.pkl")
+# ... baaki imports upar hi rahenge ...
+
+# Yeh line current folder (/api/) ke hisaab se path banayegi
+current_dir = os.path.dirname(__file__)   # yeh api/ folder dega
+model_path = os.path.join(current_dir, "model.pkl")   # → /api/model.pkl
+
+print("Current working dir:", os.getcwd())
+print("Model path trying:", model_path)
+print("File exists?", os.path.exists(model_path))
 
 model = None
-error_msg = "" # Error store karne ke liye
+error_msg = None
 
 try:
     if os.path.exists(model_path):
@@ -19,11 +26,11 @@ try:
             model = pickle.load(f)
         print("✅ Model loaded successfully!")
     else:
-        error_msg = f"File not found at: {model_path}"
+        error_msg = f"Model file not found at: {model_path}"
         print(f"❌ {error_msg}")
 except Exception as e:
-    error_msg = str(e)
-    print(f"❌ Pickle Load Error: {e}")
+    error_msg = f"Error loading model: {str(e)}"
+    print(f"❌ {error_msg}")
 
 # ... baaki code ...
 
