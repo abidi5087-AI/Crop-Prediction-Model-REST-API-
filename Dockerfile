@@ -1,6 +1,7 @@
-FROM python:3.8-slim
-WORKDIR /app
+FROM python:3.9
+WORKDIR /code
+COPY ./requirements.txt /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY . .
-RUN pip install --no-cache-dir -r requirements.txt
-CMD ["gunicorn", "--bind","0.0.0.0:10000", "app:app"]
-
+# Hugging Face port 7860 mangta hai
+CMD ["gunicorn", "-b", "0.0.0.0:7860", "app:app"]
