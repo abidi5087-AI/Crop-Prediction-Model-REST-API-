@@ -3,7 +3,7 @@ A machine learning-powered web application designed to help farmers and agricult
 
 # Live Demo:
 Check out the live application here:
-[https://abidi5097-crop-prediction-model-rest-api.hf.space]
+[https://crop-prediction-model-rest-api.onrender.com/]
 
 # Features:
 
